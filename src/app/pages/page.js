@@ -196,16 +196,33 @@ const handleAnalyzeAndGenerate = (audioFeatures) => {
     }
   
     
-  const setSpotifyCover = async () => {
+const updatePlaylistCover = async () => {
+  const imageURL = generatedImageUrl;
+  const playlistId = selectedPlaylist.id;
+  const spotifyToken = process.env.NEXT_PUBLIC_AUTH_ENDPOINT;
 
-    const response = await axios.get(`https://api.spotify.com/v1/playlists/${selectedPlaylist.id}/images`, {
+  try {
+    const response = await fetch('/api/updatePlaylistCover', {
+      method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
-        ContentType: 'image/jpeg',
-      
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        imageURL,
+        playlistId,
+        spotifyToken,
+      }),
     });
+
+    if (response.ok) {
+      console.log('Playlist cover updated successfully');
+    } else {
+      console.error('Failed to update playlist cover');
+    }
+  } catch (error) {
+    console.error('Error updating playlist cover:', error);
   }
+};
 
 
   return (
@@ -223,7 +240,7 @@ const handleAnalyzeAndGenerate = (audioFeatures) => {
           <button>Generate a new playlist Description?</button>
           {generatedImageUrl && (
             <><img src={generatedImageUrl} alt="Generated Mood" width="100%" />
-              <button onClick={setSpotifyCover}>Set as Spotify playlist cover</button>
+              <button onClick={updatePlaylistCover}>Set as Spotify playlist cover</button>
             </>
           )} 
       </Modal>
