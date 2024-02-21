@@ -3,10 +3,10 @@ import Image from "next/image";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { openai } from "openai";
-import Modal from "./modal";
-import { calculateAverages, analyzePlaylistVibe } from './utils';
+import Modal from "../components/modal";
+import { calculateAverages, analyzePlaylistVibe } from '../utils';
 
-export default function Home() {
+export default function PlaylistPage() {
   const [searchKey, setSearchKey] = useState("")
   const [playlists, setPlaylists] = useState([])
   const [tracks, setTracks] = useState([])
@@ -183,6 +183,42 @@ const handleAnalyzeAndGenerate = (audioFeatures) => {
     console.log('error in handleAnalyze')
   }
 };
+  
+
+    // const image = convertImageToBase64(generatedImageUrl)
+    // updateSpotifyPlaylistCover(image,selectedPlaylist.id,process.env.NEXT_PUBLIC_AUTH_ENDPOINTS  )
+  const updateCoverImage = async () => {
+    const id = selectedPlaylist.id;
+    const token = process.env.NEXT_PUBLIC_AUTH_ENDPOINT;
+    try {
+      const response = await fetch('/api/updatePlaylistCover', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          generatedImageUrl,
+          id,
+          token,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log('Success:', data);
+        // Handle success, maybe set a state variable to show a success message
+      } else {
+        console.error('Error:', data);
+        // Handle errors, maybe set a state variable to show an error message
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error, maybe set a state variable to show an error message
+    }
+  };
+
+
     const renderPlaylists = () => {
       return playlists.map(p => (
         <div onClick={(e) => {
@@ -195,43 +231,18 @@ const handleAnalyzeAndGenerate = (audioFeatures) => {
       ))
     }
   
-    
-const updatePlaylistCover = async () => {
-  const imageURL = generatedImageUrl;
-  const playlistId = selectedPlaylist.id;
-  const spotifyToken = process.env.NEXT_PUBLIC_AUTH_ENDPOINT;
 
-  try {
-    const response = await fetch('/api/updatePlaylistCover', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        imageURL,
-        playlistId,
-        spotifyToken,
-      }),
-    });
 
-    if (response.ok) {
-      console.log('Playlist cover updated successfully');
-    } else {
-      console.error('Failed to update playlist cover');
-    }
-  } catch (error) {
-    console.error('Error updating playlist cover:', error);
-  }
-};
+
 
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+      <button className="btn-primary">
         <a href={`${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=${process.env.NEXT_PUBLIC_RESPONSE_TYPE}`}>Login to Spotify</a>
       </button>
       
-        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" type={"submit"} onClick={handleSubmit}>Search</button>
+        <button className="btn-primary" type={"submit"} onClick={handleSubmit}>Search</button>
       <div className="grid grid-cols-3 gap-10">
         {renderPlaylists()}
         <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name}>
@@ -240,7 +251,7 @@ const updatePlaylistCover = async () => {
           <button>Generate a new playlist Description?</button>
           {generatedImageUrl && (
             <><img src={generatedImageUrl} alt="Generated Mood" width="100%" />
-              <button onClick={updatePlaylistCover}>Set as Spotify playlist cover</button>
+              <button onClick={updateCoverImage}>Set as Spotify playlist cover</button>
             </>
           )} 
       </Modal>

@@ -5,20 +5,22 @@ import fetch from 'node-fetch';
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      const { imageUrl, playlistId, spotifyToken } = req.body;
+      const { generatedImageUrl, id, token } = req.body;
 
+      console.log(req.body)
       // Fetch the image
-      const imageResponse = await fetch(imageUrl);
+      const imageResponse = await fetch(generatedImageUrl);
       const imageBuffer = await imageResponse.buffer();
       const base64Image = imageBuffer.toString('base64');
 
+
       // Spotify API endpoint to update playlist cover
-      const spotifyEndpoint = `https://api.spotify.com/v1/playlists/${playlistId}/images`;
+      const spotifyEndpoint = `https://api.spotify.com/v1/playlists/${id}/images`;
 
       // Make the PUT request to Spotify
       const spotifyResponse = await axios.put(spotifyEndpoint, Buffer.from(base64Image, 'base64'), {
         headers: {
-          'Authorization': `Bearer ${spotifyToken}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'image/jpeg',
         },
         responseType: 'arraybuffer', // Important for handling binary data
