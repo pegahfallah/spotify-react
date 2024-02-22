@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { openai } from "openai";
-import Modal from "../components/modal";
+import Modal from "./modal";
 import { calculateAverages, analyzePlaylistVibe } from '../utils';
 
 export default function PlaylistPage() {
@@ -11,6 +11,7 @@ export default function PlaylistPage() {
   const [playlists, setPlaylists] = useState([])
   const [tracks, setTracks] = useState([])
   const [trackData, setTrackData] = useState([])
+  const { login } = useAuth();
 
   const [artists, setArtists] = useState([])
   const [trackIDs, setTrackIDs] = useState([]);
@@ -188,34 +189,34 @@ const handleAnalyzeAndGenerate = (audioFeatures) => {
     // const image = convertImageToBase64(generatedImageUrl)
     // updateSpotifyPlaylistCover(image,selectedPlaylist.id,process.env.NEXT_PUBLIC_AUTH_ENDPOINTS  )
   const updateCoverImage = async () => {
-    const id = selectedPlaylist.id;
-    const token = process.env.NEXT_PUBLIC_AUTH_ENDPOINT;
-    try {
-      const response = await fetch('/api/updatePlaylistCover', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          generatedImageUrl,
-          id,
-          token,
-        }),
-      });
+    // const id = selectedPlaylist.id;
+    // const token = process.env.NEXT_PUBLIC_AUTH_ENDPOINT;
+    // try {
+    //   const response = await fetch('/api/updatePlaylistCover', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       generatedImageUrl,
+    //       id,
+    //       token,
+    //     }),
+    //   });
 
-      const data = await response.json();
+    //   const data = await response.json();
 
-      if (response.ok) {
-        console.log('Success:', data);
-        // Handle success, maybe set a state variable to show a success message
-      } else {
-        console.error('Error:', data);
-        // Handle errors, maybe set a state variable to show an error message
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      // Handle the error, maybe set a state variable to show an error message
-    }
+    //   if (response.ok) {
+    //     console.log('Success:', data);
+    //     // Handle success, maybe set a state variable to show a success message
+    //   } else {
+    //     console.error('Error:', data);
+    //     // Handle errors, maybe set a state variable to show an error message
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    //   // Handle the error, maybe set a state variable to show an error message
+    // }
   };
 
 

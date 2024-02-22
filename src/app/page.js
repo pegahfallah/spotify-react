@@ -20,7 +20,7 @@ export default function Home() {
 
   if (typeof window !== "undefined" && token) {
     // Ensuring that the router operation is applied in a client-side-only real invocation.
-    router.push('/playlist');
+    router.push('/playlists');
   }
 
 
