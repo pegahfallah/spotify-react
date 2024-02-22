@@ -5,7 +5,7 @@ import axios from 'axios';
 import { openai } from "openai";
 import Modal from "../components/modal";
 import { calculateAverages, analyzePlaylistVibe } from '../utils';
-import { useAuth } from '../context/AuthContext'; // Adjust the import path as needed
+import { useAuth } from '../context/AuthContext'; 
 
 export default function PlaylistPage() {
   const [searchKey, setSearchKey] = useState("")
@@ -47,25 +47,23 @@ useEffect(() => {
         setPlaylists(data.items)
         return data.items;
       } else if ((response.status === 429 || response.status === 503) && retryCount < 3) {
-        // Check for Retry-After header
+
         const retryAfter = response.headers.get("Retry-After");
-        const retryAfterMs = (retryAfter ? parseInt(retryAfter, 10) : 10) * 1000; // Default to 10 seconds if not provided
+        const retryAfterMs = (retryAfter ? parseInt(retryAfter, 10) : 10) * 1000; 
 
         console.log(`Rate limit exceeded. Retrying after ${retryAfterMs / 1000} seconds...`);
 
-        // Wait for the time specified in Retry-After before retrying
         await new Promise(resolve => setTimeout(resolve, retryAfterMs));
 
-        // Retry the request
         return
         (retryCount + 1);
       } else {
-        // Handle other errors or maximum retry attempts reached
+
         throw new Error(`HTTP error! status: ${response.status}`);
       }
     } catch (error) {
       console.error("Error fetching playlists:", error);
-      return []; // Return an empty array in case of an error or max retries reached
+      return []; 
     }
   };
 
@@ -92,7 +90,7 @@ useEffect(() => {
           Authorization: `Bearer ${token}`
         },
       });
-      return response.data.audio_features; // This contains the vibe data
+      return response.data.audio_features; 
     } catch (error) {
       console.error("Error fetching tracks' audio features:", error);
     }
@@ -115,13 +113,11 @@ useEffect(() => {
       console.log('No audio features found or an error occurred.');
       return;
     }
-    // Make sure trackData is set with the fetched audio features
+
     setTrackData(audioFeatures);
 
-    // Wait for trackData to be updated before analyzing and generating the image
-    // This is done by moving the handleAnalyzeAndGenerate call here
-    if (audioFeatures && audioFeatures.length > 0) { // Ensure audioFeatures is not empty
-      handleAnalyzeAndGenerate(audioFeatures); // Pass audioFeatures directly
+    if (audioFeatures && audioFeatures.length > 0) { 
+      handleAnalyzeAndGenerate(audioFeatures);
     } else {
       console.log('Audio features are empty or invalid.');
     }
@@ -207,20 +203,23 @@ useEffect(() => {
     // }
   };
 
-
-  const renderPlaylists = () => {
-    return playlists.map(p => (
-      <div onClick={(e) => {
-        setSelectedPlaylist(p)
-        setShowModal(true)
-      }} className="p-2 rounded-md hover:shadow-custom transition duration-150 ease-out hover:ease-in" key={p.id}>
-        {p.images.length ? <img width={"100%"} src={p.images[0].url} alt="" /> : <div>No Image</div>}
-        {/* {p.name} */}
+const renderPlaylists = () => {
+  return playlists.map(p => (
+    <div onClick={(e) => {
+        setSelectedPlaylist(p);
+        setShowModal(true);
+      }} className="p-2 rounded-md hover:shadow-custom transition duration-150 ease-in-out relative cursor-pointer" key={p.id}>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
+        <span className="text-white text-center">{p.name}</span>
       </div>
-    ))
-  }
-
-
+      {p.images.length ? (
+        <img className="w-full h-full rounded-md" src={p.images[0].url} alt={p.name} />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center rounded-md bg-gray-200">No Image</div>
+      )}
+    </div>
+  ))
+}
 
 
   return (

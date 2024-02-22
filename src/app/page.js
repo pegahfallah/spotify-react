@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from './context/AuthContext'; // Adjust the import path as needed
+import { useAuth } from './context/AuthContext'; 
 
 export default function Home() {
   const { token, login } = useAuth();
@@ -14,19 +14,17 @@ export default function Home() {
     if (!spotifyToken && hash) {
       spotifyToken = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1];
       window.location.hash = "";
-      login(spotifyToken); // This updates the token in both context and localStorage
+      login(spotifyToken); 
     }
 
 
   if (typeof window !== "undefined" && token) {
-    // Ensuring that the router operation is applied in a client-side-only real invocation.
     router.push('/playlists');
   }
 
 
   }, [login, router, token]);
 
-  // If there's no token, render the landing component
   return (
     <main className="flex flex-col items-center justify-between space-between gap-y-20">
       <h1 className="text-8xl">
