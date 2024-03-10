@@ -8,6 +8,14 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+html {
+  font-family: var(--font-inter);
+}
+
+h1 {
+  font-family: var(--font-iria);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -17,14 +25,15 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: #ffffff;
+  font: inriaSerif;
   background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  background: #f4fc6b;
+  background: #191414;
   
 }
 

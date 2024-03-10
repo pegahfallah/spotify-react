@@ -1,8 +1,7 @@
-import { Red_Hat_Display } from "next/font/google";
+
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 
-const red = Red_Hat_Display({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SpotAI",
@@ -14,7 +13,7 @@ export default function RootLayout({ children }) {
 
     <html lang="en">
       <AuthProvider>
-        <body className={red.className}>{children}</body>
+        <body >{children}</body>
       </AuthProvider>
     </html>
 

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from './context/AuthContext'; 
 
 export default function Home() {
+ 
   const { token, login } = useAuth();
   const router = useRouter();
 
@@ -26,13 +27,15 @@ export default function Home() {
   }, [login, router, token]);
 
   return (
-    <main className="flex flex-col items-center justify-between space-between gap-y-20">
-      <h1 className="text-8xl">
-        SpotAI generates an AI image based on your playlist vibes
+    <main >
+      <div className="h-[100vh] flex flex-col items-center justify-center align-center">
+      <h1 className="text-3xl">
+         generate a new playlist cover based on your Spotify playlist vibes
       </h1>
       <button className="btn-primary">
         <a href={`${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&response_type=${process.env.NEXT_PUBLIC_RESPONSE_TYPE}`}>Connect to Spotify</a>
-      </button>  
+        </button>  
+        </div>
     </main>
   );
 }
