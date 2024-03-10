@@ -12,7 +12,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    // Automatically attempt to retrieve the token from localStorage on initial load
     const storedToken = window.localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
