@@ -224,8 +224,8 @@ const renderPlaylists = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <h1 className="text-8xl">
-Select a playlist to generate a new Playlist Cover</h1>
+
+      <h1 className="text-8xl">Select a playlist to generate a new Playlist Cover</h1>
       <button className="btn-primary" type={"submit"} onClick={handleSubmit}>Get Playlists</button>
       <div className="grid grid-cols-4 gap-8">
         {renderPlaylists()}
