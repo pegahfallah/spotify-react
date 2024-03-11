@@ -10,6 +10,7 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [playlists, setPlaylists] = useState([])
 
   useEffect(() => {
     const storedToken = window.localStorage.getItem('token');
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, playlists, setPlaylists }}>
       {children}
     </AuthContext.Provider>
   );

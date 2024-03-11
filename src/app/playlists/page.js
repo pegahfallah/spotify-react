@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 
 export default function PlaylistPage() {
   const [searchKey, setSearchKey] = useState("")
-  const [playlists, setPlaylists] = useState([])
+  // const [playlists, setPlaylists] = useState([])
   const [tracks, setTracks] = useState([])
   const [trackData, setTrackData] = useState([])
 
@@ -20,52 +20,8 @@ export default function PlaylistPage() {
   const [selectedPlaylist, setSelectedPlaylist] = useState("")
 
   const [showModal, setShowModal] = useState(false)
-  const {token} = useAuth()
+  const {token, playlists} = useAuth()
 
-
-useEffect(() => {
-  async function fetchData() {
-    if(token) await getUsersPlaylists()
-  }
-  fetchData();
-}, []);
-
-
-  const getUsersPlaylists = async (retryCount = 0) => {
-    try {
-      const response = await fetch("https://api.spotify.com/v1/me/playlists", {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Playlists fetched:", data.items);
-        setPlaylists(data.items)
-        return data.items;
-      } else if ((response.status === 429 || response.status === 503) && retryCount < 3) {
-
-        const retryAfter = response.headers.get("Retry-After");
-        const retryAfterMs = (retryAfter ? parseInt(retryAfter, 10) : 10) * 1000; 
-
-        console.log(`Rate limit exceeded. Retrying after ${retryAfterMs / 1000} seconds...`);
-
-        await new Promise(resolve => setTimeout(resolve, retryAfterMs));
-
-        return
-        (retryCount + 1);
-      } else {
-
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error fetching playlists:", error);
-      return []; 
-    }
-  };
 
   //GET PLAYLIST TRACKS
   const getPlaylistTracks = async (playlistId) => {
@@ -150,7 +106,7 @@ useEffect(() => {
 
 
   const handleSubmit = async (e) => {
-    await getUsersPlaylists()
+    // await getUsersPlaylists()
   };
 
   const handleClickCover = async (e) => {
@@ -209,8 +165,8 @@ const renderPlaylists = () => {
         setSelectedPlaylist(p);
         setShowModal(true);
       }} className="p-2 rounded-md hover:shadow-custom transition duration-150 ease-in-out relative cursor-pointer" key={p.id}>
-      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
-        <span className="text-white text-center">{p.name}</span>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-md opacity-0 hover:opacity-100 transition-opacity duration-300 ease-in-out">
+        <span className="text-[#fefae0] text-center text-2xl">{p.name}</span>
       </div>
       {p.images.length ? (
         <img className="w-full h-full rounded-md" src={p.images[0].url} alt={p.name} />
@@ -221,16 +177,13 @@ const renderPlaylists = () => {
   ))
 }
 
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-
-      <h1 className="text-8xl">Select a playlist to generate a new Playlist Cover</h1>
-      <button className="btn-primary" type={"submit"} onClick={handleSubmit}>Get Playlists</button>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 gap-y-8">
+      <h1 className="text-6xl">Select a Playlist</h1>
+      <p className="text-xl mb-8">Select a playlist to generate a new Playlist Cover</p>
       <div className="grid grid-cols-4 gap-8">
         {renderPlaylists()}
-        <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name}>
-
+        <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name} imageUrl={selectedPlaylist.images}>
           <button onClick={handleClickCover}>Generate a new playlist cover photo?</button>
           {/* <button>Generate a new playlist Description?</button> */}
           {generatedImageUrl && (
@@ -240,7 +193,6 @@ const renderPlaylists = () => {
           )}
         </Modal>
       </div>
-
     </main>
   );
 }

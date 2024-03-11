@@ -13,7 +13,6 @@ const Album = ({ urls }) => {
               <img className="rounded-md" src={url} alt={`Album Image ${index + 1}`} />
         </div>
       ))}
-          {console.log(urls)}
     </div>
   );
 };
