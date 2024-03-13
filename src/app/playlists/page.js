@@ -184,13 +184,20 @@ const renderPlaylists = () => {
       <div className="grid grid-cols-4 gap-8">
         {renderPlaylists()}
         <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name} imageUrl={selectedPlaylist.images}>
-          <button onClick={handleClickCover}>Generate a new playlist cover photo?</button>
+          <button className="btn-primary" onClick={handleClickCover}><p>Generate a new playlist cover photo</p></button>
           {/* <button>Generate a new playlist Description?</button> */}
-          {generatedImageUrl && (
+         {/* <form>
+          <label>
+            Name:
+            <input type="text" name="name" />
+          </label>
+          <input type="submit" value="Submit" />
+        </form> */}
+           {generatedImageUrl && (
             <><img src={generatedImageUrl} alt="Generated Mood" width="100%" />
-              <button onClick={updateCoverImage}>Set as Spotify playlist cover</button>
+              {/* <button onClick={updateCoverImage}>Set as Spotify playlist cover</button> */}
             </>
-          )}
+          )} 
         </Modal>
       </div>
     </main>
