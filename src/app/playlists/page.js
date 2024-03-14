@@ -9,7 +9,6 @@ import { useAuth } from '../context/AuthContext';
 
 export default function PlaylistPage() {
   const [searchKey, setSearchKey] = useState("")
-  // const [playlists, setPlaylists] = useState([])
   const [tracks, setTracks] = useState([])
   const [trackData, setTrackData] = useState([])
 
@@ -183,7 +182,7 @@ const renderPlaylists = () => {
       <p className="text-xl mb-8">Select a playlist to generate a new Playlist Cover</p>
       <div className="grid grid-cols-4 gap-8">
         {renderPlaylists()}
-        <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name} imageUrl={selectedPlaylist.images}>
+        <Modal isOpen={showModal} setIsOpen={setShowModal} title={selectedPlaylist.name} imageUrl={selectedPlaylist.images} showImage={generateImage != ""}>
           <button className="btn-primary" onClick={handleClickCover}><p>Generate a new playlist cover photo</p></button>
           {/* <button>Generate a new playlist Description?</button> */}
          {/* <form>

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-const Modal = ({ isOpen, setIsOpen, title, children, imageUrl }) => {
+const Modal = ({ isOpen, setIsOpen, title, children, imageUrl, showImage }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-[#fefae0] p-4 rounded-lg shadow-xl max-w-md w-full">
         <div className="w-full h-full rounded-t-lg bg-cover bg-center">
-          <img src={imageUrl[0].url} width="100%" />
+          { showImage && <img src={imageUrl[0].url} width="100%" /> }
         </div>
 
         <div className="flex justify-between items-center mt-4">
